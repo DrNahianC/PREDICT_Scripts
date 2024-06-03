@@ -1,0 +1,6 @@
+Model,Best Params,Avg Validation Accuracy,Avg Validation AUC
+LogisticRegression,"{'C': 1.2689610031679222, 'max_iter': 200, 'solver': 'newton-cg'}",0.6625,0.6852380952380953
+RandomForestClassifier,"{'bootstrap': False, 'max_depth': None, 'min_samples_split': 5, 'n_estimators': 300}",0.5875,0.6061904761904762
+GradientBoostingClassifier,"{'learning_rate': 0.001, 'max_depth': None, 'min_samples_split': 5, 'n_estimators': 500}",0.5375,0.5611111111111112
+SVC,"{'C': 1, 'gamma': 'scale'}",0.625,0.6352380952380952
+MLPClassifier,"{'alpha': 0.001, 'hidden_layer_sizes': (100, 100, 100), 'max_iter': 2000}",0.525,0.6263492063492064
