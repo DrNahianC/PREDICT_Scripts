@@ -10,24 +10,27 @@ cwd = [pwd filesep]; % Store current working directory
 wpms = []; % pre-allocate a workspace variables in struct
 
 % Locate folders of interest - Change if necessary
-wpms.DATAIN   = 'D:\PREDICT_EEG_Data\';
-wpms.DATAOUT    = 'D:\PREDICT_Processed_EEG_Data\';
+wpms.DATAIN     = [cwd 'PREDICT' filesep]; 
+wpms.DATAOUT    = [cwd 'Output' filesep];
+wpms.FUNCTIONS    = [cwd 'eeglab_fieldtrip' filesep];
+wpms.CHANNELS = [cwd 'channel_info' filesep]
 
 %Add functions
-addpath('F:\eeglab_current\eeglab2019_1')
-addpath(genpath('F:\eeglab_current\eeglab2019_1\functions'));
-addpath('F:\eeglab_current\eeglab2019_1\plugins\xdfimport1.16');
-addpath('F:\eeglab_current\eeglab2019_1\plugins\bva-io1.5.13');
-addpath(genpath('F:\eeglab_current\eeglab2019_1\plugins\PrepPipeline0.55.3'));
-addpath(genpath('F:\eeglab_current\eeglab2019_1\plugins\firfilt'));
-addpath('F:\fieldtrip-20200215');
-load('F:\eeglab_current\chanlocs.mat')
-addpath('F:\fieldtrip-20200215\external\eeglab');
-load('F:\eeglab_current\neighbour_template.mat')
-neighbours = neighboursCopy;
+addpath([wpms.FUNCTIONS '\eeglab2019_1'])
+addpath(genpath([wpms.FUNCTIONS '\eeglab2019_1\functions']));
+addpath([wpms.FUNCTIONS '\eeglab2019_1\plugins\xdfimport1.16'])
+addpath([wpms.FUNCTIONS '\eeglab2019_1\plugins\bva-io1.5.13'])
+addpath(genpath([wpms.FUNCTIONS '\eeglab2019_1\plugins\PrepPipeline0.55.3']));
+addpath(genpath([wpms.FUNCTIONS '\eeglab2019_1\plugins\firfilt']));
+addpath([wpms.FUNCTIONS '\fieldtrip-20200215'])
+addpath([wpms.FUNCTIONS '\fieldtrip-20200215\external\eeglab'])
+load([wpms.CHANNELS '\chanlocs.mat'])
+load([wpms.CHANNELS '\neighbour_template.mat'])
+
+
 
 % Structure and store subject codes
-subjlist = dir([wpms.DATAOUT 'sub-*']);
+subjlist = dir([wpms.DATAIN 'sub-*']);
 exp.sessions  = {'ses-00','ses-02','ses-05'};
 
 mkdir(wpms.DATAIN); % Create Output directory
@@ -49,7 +52,7 @@ for px = 1:length(subjlist);
         [EEG, ~] = pop_loadbv(all_eeg_files(day).folder, [all_eeg_files(day).name]); %load session data
         EEG = pop_resample(EEG, 500); %downsample 500Hz
         %lookup channels
-        EEG = pop_chanedit(EEG, 'lookup', 'X:\Schabrun group data\PREDICT\EEG\Pilot EEG Data\ImpedanceChecks\eeglab_current\eeglab2019_1\plugins\dipfit\standard_BESA\standard-10-5-cap385.elp');
+        EEG = pop_chanedit(EEG, 'lookup', [wpms.FUNCTIONS 'eeglab2019_1\plugins\dipfit\standard_BESA\standard-10-5-cap385.elp']);
         % remove auxilliary channels
         EEG = pop_select(EEG, 'nochannel', {'GSR','HR','RESP'});
         EEG = pop_reref(EEG, []); %average reference data
@@ -155,10 +158,10 @@ for px = 1:length(subjlist)
 
         %interpolate missing channels
         cfg= [];
-        cfg.neighbours = neighbours;
+        cfg.neighbours = neighboursCopy;
         cfg.method         = 'nearest'
         cfg.layout = 'EEG1010.lay';
-        cfg.missingchannel = {neighbours((~ismember({neighbours(:).label}, data_pruned.label))).label};
+        cfg.missingchannel = {neighboursCopy((~ismember({neighboursCopy(:).label}, data_pruned.label))).label};
         data_repaired  = ft_channelrepair(cfg, data_pruned)
         
         %Perform frequency decomposition 

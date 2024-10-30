@@ -5,22 +5,31 @@
 
 clear all
 close all
-wpms.DATAOUT    = 'X:\Schabrun group data\PREDICT\Analysis\EEG\ICA_test\Processed\Nahian\'; % Change to wherever data is stored
-subjlist = dir([wpms.DATAOUT 'sub-*']);
+
+%% Set-up Workspace %%
+cwd = [pwd filesep]; % Store current working directory
+wpms = []; % pre-allocate a workspace variables in struct
+
+
+wpms.DATAIN    = [cwd 'Output' filesep];
+wpms.DATAOUT    = [cwd 'Output_ManualICA' filesep];
+wpms.FUNCTIONS    = [cwd 'eeglab_fieldtrip' filesep];
+wpms.CHANNELS = [cwd 'channel_info' filesep]
+
+subjlist = dir([wpms.DATAIN 'sub-*']);
 exp.sessions  = {'ses-00','ses-02','ses-05'};
 
 %Add functions
-addpath('X:\Schabrun group data\Chowdhury Nahian\EEGLAB_FieldTrip\eeglab_current\eeglab2019_1')
-addpath(genpath('X:\Schabrun group data\Chowdhury Nahian\EEGLAB_FieldTrip\eeglab_current\eeglab2019_1\functions'));
-addpath('X:\Schabrun group data\Chowdhury Nahian\EEGLAB_FieldTrip\eeglab_current\eeglab2019_1\plugins\xdfimport1.16');
-addpath('X:\Schabrun group data\Chowdhury Nahian\EEGLAB_FieldTrip\eeglab_current\eeglab2019_1\plugins\bva-io1.5.13');
-addpath(genpath('X:\Schabrun group data\Chowdhury Nahian\EEGLAB_FieldTrip\eeglab_current\eeglab2019_1\plugins\PrepPipeline0.55.3'));
-addpath(genpath('X:\Schabrun group data\Chowdhury Nahian\EEGLAB_FieldTrip\eeglab_current\eeglab2019_1\plugins\firfilt'));
-addpath('X:\Schabrun group data\Chowdhury Nahian\EEGLAB_FieldTrip\fieldtrip-20200215');
-addpath('X:\Schabrun group data\Chowdhury Nahian\EEGLAB_FieldTrip\fieldtrip-20200215\external\eeglab'); 
-
-% Load Channel locations
-load('X:\Schabrun group data\Chowdhury Nahian\chanlocs.mat') % change to wherever channel locations are stored
+addpath([wpms.FUNCTIONS '\eeglab2019_1'])
+addpath(genpath([wpms.FUNCTIONS '\eeglab2019_1\functions']));
+addpath([wpms.FUNCTIONS '\eeglab2019_1\plugins\xdfimport1.16'])
+addpath([wpms.FUNCTIONS '\eeglab2019_1\plugins\bva-io1.5.13'])
+addpath(genpath([wpms.FUNCTIONS '\eeglab2019_1\plugins\PrepPipeline0.55.3']));
+addpath(genpath([wpms.FUNCTIONS '\eeglab2019_1\plugins\firfilt']));
+addpath([wpms.FUNCTIONS '\fieldtrip-20200215'])
+addpath([wpms.FUNCTIONS '\fieldtrip-20200215\external\eeglab'])
+load([wpms.CHANNELS '\chanlocs.mat'])
+load([wpms.CHANNELS '\neighbour_template.mat'])
 final_data = "";
 
 
@@ -32,7 +41,7 @@ for px = 1:length(subjlist);
     %clearvars datasets
     fprintf(['\n Analysing participant: ' subjlist(px).name '\n\n']);
     this_subject = subjlist(px).name;
-    all_eeg_files  = dir([wpms.DATAOUT subjlist(px).name filesep '*_processed_eeglab_fieldtrip.mat']);
+    all_eeg_files  = dir([wpms.DATAIN subjlist(px).name filesep '*_processed_eeglab_fieldtrip.mat']);
   
     for day = 1:length(all_eeg_files);
        % if exist([wpms.DATAOUT subjlist(px).name filesep subjlist(px).name '_' exp.sessions{day} '_paf_componentspace.mat'],'file');
@@ -112,15 +121,15 @@ for px = 1:length(subjlist);
             chosen_spectral_data = spectral_data(:,chosen_component);
            
             %save data
-            save(['X:\Schabrun group data\Chowdhury Nahian\PREDICT - Projects\Main Outcomes Paper\Component_Data\' subjlist(px).name  '_component_data.mat'],'data_comp','data_freq','chosen_component_data','chosen_component_paf', 'chosen_spectral_data','spectral_data');% Nahian - Adjust based on what you th
+            save([wpms.DATAOUT subjlist(px).name  '_component_data.mat'],'data_comp','data_freq','chosen_component_data','chosen_component_paf', 'chosen_spectral_data','spectral_data');% Nahian - Adjust based on what you th
             %save topoplots of chosen component
-            map = topoplot(chosen_component_data,EEG.chanlocs, 'headrad', 0.66, 'plotrad', 0.72);
+            map = topoplot(chosen_component_data, chanlocs, 'headrad', 0.66, 'plotrad', 0.72);
             title(string(chosen_component_paf))
-            saveas(map,['X:\Schabrun group data\Chowdhury Nahian\PREDICT - Projects\Main Outcomes Paper\Component_Data\' subjlist(px).name '_topoplot'], 'png');% Nahian - Adjust based on what you think data output should be called
+            saveas(map,[wpms.DATAOUT subjlist(px).name '_topoplot'], 'png');% Nahian - Adjust based on what you think data output should be called
             %save spectral plot of chosen component 
             spectral = plot([2:.20:50],spectral_data(:,chosen_component));
             title(string(chosen_component_paf))
-            saveas(spectral,['X:\Schabrun group data\Chowdhury Nahian\PREDICT - Projects\Main Outcomes Paper\Component_Data\' subjlist(px).name '_spectralplot'], 'png');% Nahian - Adjust based on what you think data output should be called
+            saveas(spectral,[wpms.DATAOUT subjlist(px).name '_spectralplot'], 'png');% Nahian - Adjust based on what you think data output should be called
 
             %store chosen component data
             final_data(px,1) = subjlist(px).name;
@@ -134,7 +143,7 @@ for px = 1:length(subjlist);
             for i = 1:63;
                 channels(i,:) = string(chanlocs(i).labels);
             end
-            channels_after_exclusion = string(data_2_badtrials.label');
+            channels_after_exclusion = string(data_rejected.label');
 
             missing_channels = channels(~all(ismember(channels,channels_after_exclusion),2),:);
             for j = 1:length(missing_channels);
@@ -147,7 +156,7 @@ for px = 1:length(subjlist);
 
             chosen_component_data = string(chosen_component_data);
             chosen_component_data(:,1) = channels;
-            save(['X:\Schabrun group data\Chowdhury Nahian\PREDICT - Projects\Main Outcomes Paper\Component_Data\' subjlist(px).name  '_components_all_channels.mat'],'chosen_component_data')
+            save([wpms.DATAOUT subjlist(px).name  '_components_all_channels.mat'],'chosen_component_data')
 
 
             close all;

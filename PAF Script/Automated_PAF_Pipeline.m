@@ -20,23 +20,34 @@
 clear all
 close all
 
-wpms.DATAIN   = 'X:\Schabrun group data\PREDICT\Analysis\Processed_EEG_Data_Simplified\';
+%% Set-up Workspace %%
+cwd = [pwd filesep]; % Store current working directory
+wpms = []; % pre-allocate a workspace variables in struct
+
+wpms.DATAIN    = [cwd 'Output' filesep];
+wpms.DATAOUT    = [cwd 'Output_AutomatedICA' filesep];
+wpms.FUNCTIONS    = [cwd 'eeglab_fieldtrip' filesep];
+wpms.TEMPLATE = [cwd 'template' filesep]
+
 subjlist = dir([wpms.DATAIN 'sub-*']);
 exp.sessions  = {'ses-00','ses-02','ses-05'};
 
-%Add functions
-addpath('X:\Schabrun group data\Chowdhury Nahian\EEGLAB_FieldTrip\fieldtrip-20200215');
-addpath('X:\Schabrun group data\Chowdhury Nahian\EEGLAB_FieldTrip\fieldtrip-20200215\utilities');
-addpath('X:\Schabrun group data\Chowdhury Nahian\EEGLAB_FieldTrip\fieldtrip-20200215\external\eeglab');
-addpath(genpath('X:\Schabrun group data\Chowdhury Nahian\PREDICT - Projects\PREDICT PAF Automate vs Manual'))
-template_home = 'X:\Schabrun group data\Chowdhury Nahian\PREDICT - Projects\PREDICT PAF Automate vs Manual\scriptpipeline'
+
+%Sort these functions out
+template_home = wpms.TEMPLATE
+
+
+addpath([wpms.FUNCTIONS '\fieldtrip-20200215'])
+addpath([wpms.FUNCTIONS '\fieldtrip-20200215\external\eeglab'])
+%addpath([wpms.FUNCTIONS '\fieldtrip-20200215\utilities'])
+
 
 for px = 1:length(subjlist);
     clearvars -except subjlist wpms exp template_home b f px num_its
     fprintf(['\n Analysing participant: ' subjlist(px).name '\n\n']);
     this_subject = subjlist(px).name;
     %load sensor level data 
-    all_eeg_files  = dir([wpms.DATAOUT subjlist(px).name filesep '*_processed_eeglab_fieldtrip.mat']);
+    all_eeg_files  = dir([wpms.DATAIN subjlist(px).name filesep '*_processed_eeglab_fieldtrip.mat']);
 
     for f = 1:1
         num_its = [1 2 3 4 5 6 7 8 9 10]
@@ -129,7 +140,7 @@ for px = 1:length(subjlist);
             cfg.component=selected_component;
             ft_topoplotIC(cfg,IC); title(strcat('correlation prob between IC and template= ',num2str(p(maximum_component_index))));;
             colormap('jet');
-            savefig(['X:\Schabrun group data\Chowdhury Nahian\PREDICT - Projects\PREDICT PAF Automate vs Manual\Sarah\PREDICT_Data\' subjlist(px).name '_iter_' char(string(b)) '_topoplot.fig'])
+            savefig([wpms.DATAOUT subjlist(px).name '_iter_' char(string(b)) '_topoplot.fig'])
 
             dummy=IC;
             dummy.dimord='chan_time'
@@ -199,7 +210,7 @@ for px = 1:length(subjlist);
             %title(strcat('correlation prob between IC and template= ',num2str(p(maximum_component_index))));;
             %colormap('jet');
 
-            save(['X:\Schabrun group data\Chowdhury Nahian\PREDICT - Projects\PREDICT PAF Automate vs Manual\Sarah\PREDICT_Data\' subjlist(px).name '_iter_' char(string(b)) '_sarah_ICA.mat'],'IC', 'corr_to_template', 'alpha_components', 'selected_component','alpha_IC','PAF','PAF_Timeseries', 'p', 'Alpha_Power', 'cfg', 'cfg2', 'cfg3', 'Power_Timeseries','alpha_IC_trials', 'maximum_component_index', 'max_r')
+            save([wpms.DATAOUT subjlist(px).name '_iter_' char(string(b)) '_sarah_ICA.mat'],'IC', 'corr_to_template', 'alpha_components', 'selected_component','alpha_IC','PAF','PAF_Timeseries', 'p', 'Alpha_Power', 'cfg', 'cfg2', 'cfg3', 'Power_Timeseries','alpha_IC_trials', 'maximum_component_index', 'max_r')
 
             %this variable ^^ "shows my work" update to the name/location of your script or delete it.
             close all
@@ -211,7 +222,6 @@ end
 
 %% DECIDE WHICH ITERATION GENERATES THE BEST CORRELATION
 
-wpms.DATAOUT    = 'X:\Schabrun group data\Chowdhury Nahian\PREDICT - Projects\PREDICT PAF Automate vs Manual\Sarah\PREDICT_Data\';
 subjlist = dir([wpms.DATAOUT '*_sarah_ICA.mat']);
 
 file_count = 1;
@@ -294,5 +304,5 @@ for sub = 1:length(subjlist);
     Best_correlations(sub,:) = m;
 end
 PAF_best_match(PAF_best_match == 0) = NaN
-save('X:\Schabrun group data\Chowdhury Nahian\PREDICT - Projects\PREDICT PAF Automate vs Manual\Sarah\winners.mat','PAF_best_match','Best_correlations')
+save([wpms.DATAOUT 'winners.mat'],'PAF_best_match','Best_correlations')
 
