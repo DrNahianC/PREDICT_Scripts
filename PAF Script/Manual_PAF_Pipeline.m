@@ -41,16 +41,18 @@ for px = 1:length(subjlist);
     %clearvars datasets
     fprintf(['\n Analysing participant: ' subjlist(px).name '\n\n']);
     this_subject = subjlist(px).name;
-    all_eeg_files  = dir([wpms.DATAIN subjlist(px).name filesep '*_processed_eeglab_fieldtrip.mat']);
-  
-    for day = 1:length(all_eeg_files);
+    all_fieldtrip_files  = dir([wpms.DATAIN subjlist(px).name filesep '*_processed_eeglab_fieldtrip.mat']);
+    all_eeglab_files  = dir([wpms.DATAIN subjlist(px).name filesep '*_processed_eeglab.mat']);
+
+    for day = 1:length(all_fieldtrip_files);
        % if exist([wpms.DATAOUT subjlist(px).name filesep subjlist(px).name '_' exp.sessions{day} '_paf_componentspace.mat'],'file');
        %     fprintf('\n Have already analyzed this participant \n\n');
        %  else
 
             clearvars cfg data data_freq data_comp EEG freq paf power promt rejected temp temp2 X y z n_rejected;
-            load([all_eeg_files(day).folder filesep all_eeg_files(day).name], 'data_rejected', 'EEG');
-            
+            load([all_fieldtrip_files(day).folder filesep all_fieldtrip_files(day).name], 'data_rejected');
+            load([all_eeglab_files(day).folder filesep all_eeglab_files(day).name], 'EEG');
+
             %% ICA and Plot Components
 
             %Run ICA
@@ -123,7 +125,7 @@ for px = 1:length(subjlist);
             %save data
             save([wpms.DATAOUT subjlist(px).name  '_component_data.mat'],'data_comp','data_freq','chosen_component_data','chosen_component_paf', 'chosen_spectral_data','spectral_data');% Nahian - Adjust based on what you th
             %save topoplots of chosen component
-            map = topoplot(chosen_component_data, chanlocs, 'headrad', 0.66, 'plotrad', 0.72);
+            map = topoplot(chosen_component_data, EEG.chanlocs, 'headrad', 0.66, 'plotrad', 0.72);
             title(string(chosen_component_paf))
             saveas(map,[wpms.DATAOUT subjlist(px).name '_topoplot'], 'png');% Nahian - Adjust based on what you think data output should be called
             %save spectral plot of chosen component 
