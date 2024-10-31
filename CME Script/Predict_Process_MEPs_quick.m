@@ -4,7 +4,7 @@ cwd = [pwd filesep]; % Store current working directory
 wpms = []; % pre-allocate a workspace variables in struct
 
 % Locate folders of interest - Change if necessary
-wpms.DATAIN     = fullfile(cwd, ['..'  filesep 'PREDICT_Data'], filesep); % /../ skips back a folder
+wpms.DATAIN     = [cwd 'PREDICT_TMS' filesep];; % /../ skips back a folder
 wpms.DATAOUT    = [cwd 'Output' filesep];
 wpms.GRIDLOC    = [cwd 'Gridloc' filesep];
 
@@ -57,12 +57,7 @@ for px = 1:length(subjlist) %Change the 1 here if you want start at a specific p
         % print out session codes to review
         fprintf(['\n Analysing session: ' exp.sessions{day} '\n\n']);
         
-        % Check this data has not already been analysed. If so skip this
-        % participant
-        % if exist([wpms.DATAOUT subjlist(px).name filesep subjlist(px).name '_' exp.sessions{day} '_TrialData.mat']) % TODO: Change to what the final data will be called.
-        %    fprintf(['\n This participants ' exp.sessions{day} ' data has already been processed. Moving on... \n\n']);
-            
-        %else
+       
             % Print out exact files to be loaded for QC
             fprintf(['Working on the following spike file: ' spikefiles(day).name '\n'])
             fprintf(['Working on the following coordinate file: ' coordinates(day).name '\n'])
@@ -144,8 +139,7 @@ for px = 1:length(subjlist) %Change the 1 here if you want start at a specific p
             
             converted_Grid = str2double(new_grid);
             converted_Grid(isnan(converted_Grid))=0;
-            %If each site is normalized relative to the max MEP
-            %Converted_Grid = (Converted_Grid/(max(Converted_Grid,[],'all')))*100;
+
             
             stored_map_data = array2table(converted_Grid, 'VariableNames', {'-8','-7','-6','-5','-4','-3','-2','-1','0','1','2','3','4','5'}, 'RowNames', {'12','11','10','9','8','7','6','5','4','3','2','1','0'});
             
@@ -155,10 +149,9 @@ for px = 1:length(subjlist) %Change the 1 here if you want start at a specific p
             active_sites = converted_Grid > max(converted_Grid,[],'all')/10;
             map_area(px, day) = sum(active_sites(:) == 1);
             %of all active sites defined as a site greater than >10% of the
-            %maximum MEP amplitude 
-            
+            %maximum MEP amplitude            
             participant_volumes(px, day) = map_volume
-    
+            save([wpms.DATAOUT subjlist(px).name filesep subjlist(px).name '_' exp.sessions{day} '_cme_data.mat'], 'map_volume', 'map_area')
     %end use this for the if else loop for existing folders  
     end % Session number for loop
     
