@@ -4,7 +4,7 @@ cwd = [pwd filesep]; % Store current working directory
 wpms = []; % pre-allocate a workspace variables in struct
 
 % Locate folders of interest - Change if necessary
-wpms.DATAIN     = [cwd 'PREDICT_TMS' filesep];; % /../ skips back a folder
+wpms.DATAIN     = [cwd 'PREDICT_TMS_Raw_Data' filesep];; % /../ skips back a folder
 wpms.DATAOUT    = [cwd 'Output' filesep];
 wpms.GRIDLOC    = [cwd 'Gridloc' filesep];
 
