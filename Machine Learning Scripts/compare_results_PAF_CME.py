@@ -51,7 +51,7 @@ plt.yticks(fontsize=20)
 plt.xticks(fontsize=20)
 plt.legend(loc='best', fontsize=20)
 plt.show()
-plt.savefig('D:/PREDICT - Projects/Main Outcomes Paper/Chuan Report/figures/PAF_CME_roc_test.png')
+plt.savefig('figures/PAF_CME_roc_test.png')
 # save figures
 print('AUC:', auc(lr_fpr_test, lr_tpr_test))
 
@@ -84,7 +84,7 @@ plt.ylim([0,12])
 plt.ylabel('Pain Score (chew + yawn)', fontsize=48)
 plt.legend(loc='best', fontsize=48)
 plt.grid(False)
-plt.savefig('D:/PREDICT - Projects/Main Outcomes Paper/Chuan Report/figures/PAF_CME_pain_severity_test.png')
+plt.savefig('figures/PAF_CME_pain_severity_test.png')
 plt.show()
 plt.close('all')
 

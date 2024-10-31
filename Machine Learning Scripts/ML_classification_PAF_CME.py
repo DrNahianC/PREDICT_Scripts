@@ -210,6 +210,6 @@ plt.yticks(fontsize=20)
 plt.xticks(fontsize=20)
 plt.legend(loc='best', fontsize=20)
 # save figure
-plt.savefig('D:/PREDICT - Projects/Main Outcomes Paper/Chuan Report/figures/Training_ROC_curve.png', dpi=300, bbox_inches='tight')
+plt.savefig('figures/Training_ROC_curve.png', dpi=300, bbox_inches='tight')
 plt.show()
 plt.close('all')

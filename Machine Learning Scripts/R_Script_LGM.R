@@ -7,6 +7,7 @@ install.packages("reshape2")
 install.packages("ggpubr")
 install.packages("lcmm")
 
+
 require(Hmisc)
 require(ggplot2)
 require(rms)
@@ -17,7 +18,8 @@ require(reshape2)
 require(ggpubr)
 require(lcmm)
 
-setwd("X:/Schabrun group data/Chowdhury Nahian/PREDICT - Projects/Main Outcomes Paper/Chuan Report")
+
+setwd("PREDICT_Scripts-main/Machine Learning Scripts") #change this to where your script directory is on your machine 
 chew_pain_df=read.csv("Train/df_chew_filled_train.csv")
 yawn_pain_df=read.csv("Train/df_yawn_filled_train.csv")
 all_pain_df_train=yawn_pain_df + chew_pain_df
