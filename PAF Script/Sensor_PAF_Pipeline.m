@@ -10,7 +10,7 @@ cwd = [pwd filesep]; % Store current working directory
 wpms = []; % pre-allocate a workspace variables in struct
 
 % Locate folders of interest - Change if necessary
-wpms.DATAIN     = [cwd 'PREDICT' filesep]; 
+wpms.DATAIN     = [cwd 'PREDICT_EEG_Raw_Data' filesep]; 
 wpms.DATAOUT    = [cwd 'Output' filesep];
 wpms.FUNCTIONS    = [cwd 'eeglab_fieldtrip' filesep];
 wpms.CHANNELS = [cwd 'channel_info' filesep]
