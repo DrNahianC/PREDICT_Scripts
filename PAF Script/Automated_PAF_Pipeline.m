@@ -39,7 +39,7 @@ template_home = wpms.TEMPLATE
 
 addpath([wpms.FUNCTIONS '\fieldtrip-20200215'])
 addpath([wpms.FUNCTIONS '\fieldtrip-20200215\external\eeglab'])
-%addpath([wpms.FUNCTIONS '\fieldtrip-20200215\utilities'])
+addpath([wpms.FUNCTIONS '\fieldtrip-20200215\utilities'])
 
 
 for px = 1:length(subjlist);
@@ -225,7 +225,7 @@ end
 subjlist = dir([wpms.DATAOUT '*_sarah_ICA.mat']);
 
 file_count = 1;
-for sub = 1:length(subjlist);
+for sub = 1:length(subjlist)/10;
     clearvars m index
     for this_file = 1:10;
         clearvars max_r PAF alpha_components alpha_IC_trials IC selected_component
