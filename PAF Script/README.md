@@ -1,6 +1,7 @@
 This is the directory to analyse the EEG dataset. 
 
 ### Pre-requirements to Run Script
+
 ## EEGLAB AND FIELDTRIP
 You will need MATLAB, EEGLAB and FIELDTRIP to run these scripts. These should be kept in the 
 "eeglab_fieldtrip" folder. The current scripts call on "eeglab2019_1" and "fieldtrip-20200215", so 
