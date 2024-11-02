@@ -29,7 +29,7 @@ exp.filetypes = {'S2R','s2rx','smr','csv','mat'};
 % Run script looping through each subject code. 'px' is used becuase it
 % stands out more within the loop amoung the variable names
 
-for px = 121:length(subjlist) %Change the 1 here if you want start at a specific participant e.g. change 1 to 16
+for px = 1:length(subjlist) %Change the 1 here if you want start at a specific participant e.g. change 1 to 16
     
     % print out subject codes to review
     fprintf(['\n Analysing participant: ' subjlist(px).name '\n\n']);
