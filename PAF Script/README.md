@@ -28,10 +28,8 @@ We have already included the Output directories for each of the three pipelines
 
 ### Using the Three different Scripts
 To analyse the EEG data, please start at "Sensor_PAF_Pipeline.m" which is the backbone for the 
-Automated and Manual component selection pipleines. It contains the script the raw data loading (i.e
-the brain vision files), bad channel selection, bad epoch selection, ICA to remove ocular artefacts
-and interpolation of channels. The output of this is used to calculate the sensorimotor ROI PAF
-in the main paper. All data is saved in the Output Folder directory
+Automated and Manual component selection pipleines. It contains the script for the raw data loading (i.e the brain vision files), bad channel selection, bad epoch selection, ICA to remove ocular 
+artefacts and interpolation of channels. The output of this is used to calculate the sensorimotor ROI PAF in the main paper. All data is saved in the Output Folder directory
 
 The Automated and manual component selection scripts start at the point after bad epochs are removed
 in fieldtrip from the Sensor_PAF_Pipeline script. Specifically, it calls on data from the "Output"
