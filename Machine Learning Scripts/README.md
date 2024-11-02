@@ -12,7 +12,8 @@ test set pain diary data with the output being "Test_shuffled/df_chew_filled_tes
 
 "R_Script_LGM.R" calls on "Train/df_chew_filled_train.csv", "Train/df_yawn_filled_train.csv"
 , "Test_shuffled/df_chew_filled_test.csv" and "Test_shuffled/df_yawn_filled_test.csv" to run
-the growth mixture modelling using data from the first 7 days
+the growth mixture modelling using data from the first 7 days. You will need to set your working 
+directory to wherever you have saved this folder on your computer
 
 "shuffle_ID.py" calls on "Test_unshuffled/Pain_Diary_Data_Test_Unshuffled.xlsx" to shuffle the IDs
 of test set participants
