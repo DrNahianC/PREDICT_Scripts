@@ -29,14 +29,14 @@ exp.filetypes = {'S2R','s2rx','smr','csv','mat'};
 % Run script looping through each subject code. 'px' is used becuase it
 % stands out more within the loop amoung the variable names
 
-for px = 1:length(subjlist) %Change the 1 here if you want start at a specific participant e.g. change 1 to 16
+for px = 121:length(subjlist) %Change the 1 here if you want start at a specific participant e.g. change 1 to 16
     
     % print out subject codes to review
     fprintf(['\n Analysing participant: ' subjlist(px).name '\n\n']);
     
     % Look for subject data files
-    spikefiles  = dir([wpms.DATAIN subjlist(px).name filesep 'tms' filesep '*-Map*.mat']); %the spike files for the mapping procedure
-    coordinates = dir([wpms.DATAIN subjlist(px).name filesep 'tms' filesep '*_locations.csv']); % files containing the locations corresponding to each tms pulse 
+    spikefiles  = dir([wpms.DATAIN subjlist(px).name filesep 'tms' filesep subjlist(px).name '*-Map.mat']); %the spike files for the mapping procedure
+    coordinates = dir([wpms.DATAIN subjlist(px).name filesep 'tms' filesep subjlist(px).name '*_locations.csv']); % files containing the locations corresponding to each tms pulse 
     
     % Sanity check - should be equal numbers of files
     if length(spikefiles) ~= length(coordinates)
