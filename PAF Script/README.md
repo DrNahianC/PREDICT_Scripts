@@ -15,13 +15,7 @@ You can download all the EEG data from https://openneuro.org/datasets/ds005486/v
 store this in the "PREDICT_EEG_Raw_Data" directory
 
 ## Channels and Templates
-In "channel_info", we have already uploaded details of the 63 channels for the EEG recording. We have also uploaded
-the "neighbours" template which contains the neighbouring channels of each channel needed to 
-interpolate any excluded electrodes. 
-
-Lastly, in "tempalte" we have uploaded "SarahTemplate_2" which is the sensorimotor
-component template (obtained from Author Sarah Margerison) used to choose the "winning sensorimotor
-component" in the automated ICA pipeline. 
+In "channel_info", we have already uploaded details of the 63 channels for the EEG recording. We have also uploaded the "neighbours" template which contains the neighbouring channels of each channel needed to  interpolate any excluded electrodes. Lastly, we have uploaded "SarahTemplate_2" which is the sensorimotor component template (obtained from Author Sarah Margerison) used to choose the "winning sensorimotor component" in the automated ICA pipeline. 
 
 ## Output Directories
 We have already included the Output directories for each of the three pipelines
