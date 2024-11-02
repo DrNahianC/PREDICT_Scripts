@@ -27,7 +27,7 @@ wpms = []; % pre-allocate a workspace variables in struct
 wpms.DATAIN    = [cwd 'Output' filesep];
 wpms.DATAOUT    = [cwd 'Output_AutomatedICA' filesep];
 wpms.FUNCTIONS    = [cwd 'eeglab_fieldtrip' filesep];
-wpms.TEMPLATE = [cwd 'template' filesep]
+wpms.TEMPLATE = [cwd 'channel_info' filesep]
 
 subjlist = dir([wpms.DATAIN 'sub-*']);
 exp.sessions  = {'ses-00','ses-02','ses-05'};
