@@ -1,1 +1,1 @@
-
+This is the directory for the EEGLAB and FIELDTRIP toolboxes. The current scripts call on "eeglab2019_1" and "fieldtrip-20200215", so if you have another version, you will need to update the script on Lines 19-28 of Sensor_PAF_Pipeline.mat , Lines 23-32 of Manual_PAF_Pipeline.m and Lines 40-42 of Automated_PAF_Pipeline.m to the version that you are using. e.g. if you are using "eeglab2023.0", then change all references of "eeglab2019_1" to "eeglab2023.0".
